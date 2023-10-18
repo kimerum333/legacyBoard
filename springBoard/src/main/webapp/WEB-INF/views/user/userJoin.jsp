@@ -10,18 +10,12 @@
 <script type="text/javascript">
 </script>
 <body>
+	<td align="right"><a href="/board/boardList.do">List</a></td>		
 	<form class="boardWrite" action="">
 		<table align="center">
 			<tr>
-				<td align="right">
-					<input type="button" value="행추가" onclick="addRow()"> 
-					<input id="submit" type="button" value="작성">
-				</td>
-			</tr>
-			<tr>
 				<td>
 					<table border="1">
-						<!--  -->
 						<tr class="boardWriteRow1">
 							<td width="120" align="center">Type</td>
 							<td width="400"><select name="boardType">
@@ -32,13 +26,11 @@
 						</tr>
 						<tr class="boardWriteRow1">
 							<td width="120" align="center">Title</td>
-							<td width="400"><input name="boardTitle" type="text"
-								size="50" value=""></td>
+							<td width="400"><input name="boardTitle" type="text" size="50" value=""></td>
 						</tr>
 						<tr class="boardWriteRow1">
 							<td height="300" align="center">Comment</td>
-							<td valign="top"><textarea name="boardComment" rows="20"
-									cols="55"></textarea></td>
+							<td valign="top"><textarea name="boardComment" rows="20" cols="55"></textarea></td>
 						</tr>
 						<tr id="addPoint"></tr>
 						<!--  -->

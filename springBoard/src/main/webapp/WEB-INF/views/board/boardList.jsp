@@ -96,6 +96,10 @@
 <body>
 <table  align="center">
 	<tr>
+		<td align="left">
+			<a href = "#">login</a>
+			<a href = "#">join</a>
+		</td>
 		<td align="right">
 			total : ${totalCnt}
 		</td>
