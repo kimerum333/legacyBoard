@@ -8,9 +8,6 @@
 <title>userJoin</title>
 </head>
 <script type="text/javascript">
-
-
-
 function pwCheckStringChange(){
 	let pwCheckResult = document.getElementById('pwCheckResult');
 	if(pwCheck()){
@@ -20,14 +17,31 @@ function pwCheckStringChange(){
 	}
 }
 
-
 function submit(){
 	if(!validCheck()){
 		return;
 	}
 	
-	let form = $('.userJoin :input');
+	let form = $j('.userJoin :input');
 	let param = form.serialize();
+	
+	$j.ajax({
+		url : "/user/insertUser.do",
+		dataType : "json",
+		type : "POST",
+		data : param,
+		success : function(data, textStatus, jqXHR) {
+			alert("게시물 등록완료");
+
+			alert("메세지:" + data.success);
+
+			location.href = "/board/boardList.do?pageNo=0";
+		},
+		error : function(jqXHR, textStatus, errorThrown) {
+			alert("게시물 등록 실패");
+		}
+	});
+	
 }
 function validCheck(){
 	if(!necessaryCheck()){
@@ -46,6 +60,7 @@ function validCheck(){
 		alert('비밀번호확인과 비밀번호가 일치하지 않습니다.');
 		return false;
 	}
+	return true;
 }
 function pwCheck(){
 	let pw = document.getElementById('userPw');
@@ -86,7 +101,7 @@ function postNoCheck(){
 	if(splitted.length!=2||postNo.length!=7){
 		return false;
 	}
-	if(isNaN(splitted[0])||isNaN(splitted[1])){
+	if(isNaN(splitted[0])||isNaN(splitted[1])||splitted[1].length!=3||splitted[0].length!=3){
 		return false;
 	}else{
 		return true;
