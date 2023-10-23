@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.board.HomeController;
-import com.spring.board.service.boardService;
+import com.spring.board.service.BoardService;
 import com.spring.board.vo.BoardVo;
 import com.spring.board.vo.CodeVo;
 import com.spring.board.vo.PageVo;
@@ -30,7 +30,7 @@ import com.spring.common.CommonUtil;
 public class BoardController {
 
 	@Autowired
-	boardService boardService;
+	BoardService boardService;
 
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
@@ -55,9 +55,10 @@ public class BoardController {
 		//리스트 뽑는다
 		boardList = boardService.SelectBoardList(pageVo);
 		//토탈 뽑는다
-		totalCnt = boardService.selectBoardCnt();
+		totalCnt = boardService.selectBoardCnt(pageVo);
 		//코드 뽑는다
 		codeList = boardService.selectCode("menu");
+		logger.info("listBoard : totalCnt = "+totalCnt);
 		
 
 		//모델에 전달
@@ -89,9 +90,10 @@ public class BoardController {
 		//리스트 뽑는다
 		boardList = boardService.SelectBoardList(pageVo);
 		//토탈 뽑는다
-		totalCnt = boardService.selectBoardCnt();
+		totalCnt = boardService.selectBoardCnt(pageVo);
 		//코드 뽑는다
 		codeList = boardService.selectCode("menu");
+		logger.info("reload : total is "+totalCnt);
 		
 		map.put("boardList", boardList);
 		map.put("totalCnt", totalCnt);

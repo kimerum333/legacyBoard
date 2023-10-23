@@ -6,7 +6,7 @@ import com.spring.board.vo.BoardVo;
 import com.spring.board.vo.CodeVo;
 import com.spring.board.vo.PageVo;
 
-public interface boardService {
+public interface BoardService {
 
 	public String selectTest() throws Exception;
 
@@ -14,7 +14,7 @@ public interface boardService {
 
 	public BoardVo selectBoard(String boardType, int boardNum) throws Exception;
 
-	public int selectBoardCnt() throws Exception;
+	public int selectBoardCnt(PageVo pageVo) throws Exception;
 
 	public int boardInsert(BoardVo boardVo) throws Exception;
 	

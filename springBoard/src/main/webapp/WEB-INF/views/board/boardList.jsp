@@ -56,6 +56,7 @@
 		    {				
 				//console.log(JSON.stringify(data.boardList));
 				listReload(data.boardList);
+				changeTotalCnt(data.totalCnt);
 		    },
 		    error: function (jqXHR, textStatus, errorThrown)
 		    {
@@ -90,19 +91,30 @@
 		';
 		return $j(htmlStr);
 	}
+	function changeTotalCnt(count){
+		let total = document.getElementById('totalCnt');
+		total.innerText = 'total : '+count;
+	}
 	
-
 </script>
 <body>
 <table  align="center">
 	<tr>
-		<td align="left">
-			<a href = "#">login</a>
-			<a href = "/user/join.do">join</a>
-		</td>
-		<td align="right">
+		<c:if test="${empty loginUser}">
+			<td align="left">
+				<a href = "/user/login.do">login</a>
+				<a href = "/user/join.do">join</a>
+			</td>
+		</c:if>
+		<c:if test="${!empty loginUser}">
+			<td align="left">
+				<span>${loginUser.userName} ดิ</span>
+				<a href = "/user/logout.do">logout</a>
+			</td>
+		</c:if>		
+		<td id = "totalCnt" align="right">
 			total : ${totalCnt}
-		</td>
+		</td>		
 	</tr>
 	<tr>
 		<td>
