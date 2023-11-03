@@ -3,17 +3,22 @@ package com.spring.board.vo;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author kimer
+ *
+ */
 public class BoardVo {
 	
 	private String 	boardType;
 	private int 	boardNum;
 	private String 	boardTitle;
 	private String 	boardComment;
-	private String 	creator;
+	private String 	creator="";
 	private String	modifier;
 	private int totalCnt;
 	private List<BoardVo> boardVoList;
 	private String boardTypeKr;
+	private String creatorName;
 	
 	public BoardVo() {
 		
@@ -77,6 +82,20 @@ public class BoardVo {
 	public void setBoardTypeKr(String boardTypeKr) {
 		this.boardTypeKr = boardTypeKr;
 	}
+	public String getCreatorName() {
+		return creatorName;
+	}
+	public void setCreatorName(String creatorName) {
+		this.creatorName = creatorName;
+	}
+	@Override
+	public String toString() {
+		return "BoardVo [boardType=" + boardType + ", boardNum=" + boardNum + ", boardTitle=" + boardTitle
+				+ ", boardComment=" + boardComment + ", creator=" + creator + ", modifier=" + modifier + ", totalCnt="
+				+ totalCnt + ", boardVoList=" + boardVoList + ", boardTypeKr=" + boardTypeKr + ", creatorName="
+				+ creatorName + "]";
+	}
+	
 	
 	
 	

@@ -24,5 +24,10 @@ public class CodeVo {
 	public void setCodeType(String codeType) {
 		this.codeType = codeType;
 	}
+	@Override
+	public String toString() {
+		return "CodeVo [codeType=" + codeType + ", codeId=" + codeId + ", codeName=" + codeName + "]";
+	}
+	
 	
 }

@@ -1,7 +1,7 @@
 package com.spring.user.vo;
 
 public class UserVo {
-	private String userId;
+	private String userId="";
 	private String userPw;
 	private String userName;
 	private int userPhone1;

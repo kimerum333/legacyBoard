@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,7 @@ import com.spring.board.vo.BoardVo;
 import com.spring.board.vo.CodeVo;
 import com.spring.board.vo.PageVo;
 import com.spring.common.CommonUtil;
+import com.spring.user.vo.UserVo;
 
 @Controller
 public class BoardController {
@@ -52,12 +54,20 @@ public class BoardController {
 		if(pageVo.getPageNo() == 0){
 			pageVo.setPageNo(page);
 		}
+		
+		if(pageVo.getSearchConditions()==null) {
+			logger.info("서치컨디션이 비었음");
+		}
+		//코드 뽑는다
+		codeList = boardService.selectCode("menu");
+		for(CodeVo codevo:codeList) {
+			logger.info("Searching Codes... : " +codevo.toString());
+		}
 		//리스트 뽑는다
 		boardList = boardService.SelectBoardList(pageVo);
 		//토탈 뽑는다
 		totalCnt = boardService.selectBoardCnt(pageVo);
-		//코드 뽑는다
-		codeList = boardService.selectCode("menu");
+
 		logger.info("listBoard : totalCnt = "+totalCnt);
 		
 
@@ -120,6 +130,7 @@ public class BoardController {
 		model.addAttribute("boardType", boardType);
 		model.addAttribute("boardNum", boardNum);
 		model.addAttribute("board", boardVo);
+		logger.info(boardVo.toString());
 
 		return "board/boardView";
 	}
@@ -137,14 +148,26 @@ public class BoardController {
 	//실제 insert
 	@RequestMapping(value = "/board/boardWriteAction.do", method = RequestMethod.POST)
 	@ResponseBody
-	public String boardWriteAction(Locale locale, BoardVo boardVo) throws Exception{
+	public String boardWriteAction(Locale locale, BoardVo boardVo,HttpServletRequest request) throws Exception{
 		
+		
+		
+		HttpSession session = request.getSession();
+		UserVo user = new UserVo();
+		Object obj = session.getAttribute("loginUser");
+		if(obj!=null) {
+			user = (UserVo) obj;
+		}
+		
+		
+		logger.info("incoming boardInsert, "+user.getUserId()+"is logined, "+boardVo.toString());
 		
 		HashMap<String, String> result = new HashMap<>();
 		CommonUtil commonUtil = new CommonUtil();
 
 		int resultCnt = 0;
 		//기본 1건
+		boardVo.setCreator(user.getUserId());
 		resultCnt+=boardService.boardInsert(boardVo);
 		
 		//행추가로 들어오는 것들
@@ -153,6 +176,8 @@ public class BoardController {
 			for(BoardVo board:boardList) {
 				//삭제되거나 빠진 넘버를 가진 추가행들 넘기기
 				if(board.getBoardTitle()!=null) {
+					board.setCreator(user.getUserId());
+					logger.info("inserting Board"+board.toString());
 					resultCnt+=boardService.boardInsert(board);
 				}
 			}
@@ -169,6 +194,8 @@ public class BoardController {
 	@RequestMapping(value = "/board/boardUpdateAction.do", method = RequestMethod.POST)
 	@ResponseBody
 	public String boardUpdateAction(Locale locale,BoardVo boardVo) throws Exception{
+		
+		logger.info("incoming boardUpdate, "+boardVo.toString());
 
 		HashMap<String, String> result = new HashMap<>();
 		CommonUtil commonUtil = new CommonUtil();
@@ -189,7 +216,6 @@ public class BoardController {
 	public String boardDeleteAction(Locale locale,BoardVo boardVo) throws Exception{
 
 		HashMap<String, String> result = new HashMap<>();
-		CommonUtil commonUtil = new CommonUtil();
 
 		int resultCnt = boardService.boardDelete(boardVo);
 

@@ -8,6 +8,18 @@
 <title>boardWrite</title>
 </head>
 <script type="text/javascript">
+
+const titles = { "max": 16, "name": "제목" };
+const comments = { "max": 300, "name": "게시글 내용" };
+
+function maxsLength(input,obj){
+	if(input.value.length>obj.max){
+		alert(obj.name+'은 최대 '+obj.max+'자 까지만 입력할 수 있습니다.');
+		input.value=input.value.substring(0,obj.max);
+		input.focus();
+	}
+}
+
 	var boardWriteRowCount = 1;
 	var optionStr = '';
 
@@ -62,7 +74,7 @@
 							Title\
 						</td>\
 						<td width="400">\
-							<input name="boardVoList['+boardWriteRowCount+'].boardTitle" type="text" size="47" value="" align="left"> \
+							<input name="boardVoList['+boardWriteRowCount+'].boardTitle" type="text" size="47" value="" align="left" oninput="maxsLength(this,titles)"> \
 							<input type="button" value="행삭제" onclick="deleteRow('
 				+ boardWriteRowCount
 				+ ')" align="right">\
@@ -73,7 +85,7 @@
 							Comment\
 						</td>\
 						<td valign="top">\
-							<textarea name="boardVoList['+boardWriteRowCount+'].boardComment"  rows="20" cols="55"></textarea>\
+							<textarea name="boardVoList['+boardWriteRowCount+'].boardComment"  rows="20" cols="55" oninput="maxsLength(this,comments)"></textarea>\
 						</td>\
 					</tr>';
 		let newRow = $j(str1 + str2 + str3);
@@ -99,36 +111,55 @@
 			<tr>
 				<td>
 					<table border="1">
-						<!--  -->
 						<tr class="boardWriteRow1">
-							<td width="120" align="center">Type</td>
-							<td width="400"><select name="boardType">
+							<td width="120" align="center">
+								Type
+							</td>
+							<td width="400">
+								<select name="boardType">
 									<c:forEach var="code" items="${codeList}">
-										<option class="boardTypeOption" value="${code.codeId}">${code.codeName}</option>
+										<option class="boardTypeOption" value="${code.codeId}">
+											${code.codeName}
+										</option>
 									</c:forEach>
-							</select></td>
+								</select>
+							</td>
 						</tr>
 						<tr class="boardWriteRow1">
-							<td width="120" align="center">Title</td>
-							<td width="400"><input name="boardTitle" type="text"
-								size="50" value=""></td>
+							<td width="120" align="center">
+								Title
+							</td>
+							<td width="400">
+								<input name="boardTitle" type="text" size="50" value="" oninput="maxsLength(this,titles)">
+							</td>
 						</tr>
 						<tr class="boardWriteRow1">
-							<td height="300" align="center">Comment</td>
-							<td valign="top"><textarea name="boardComment" rows="20"
-									cols="55"></textarea></td>
+							<td height="300" align="center">
+								Comment
+							</td>
+							<td valign="top">
+								<textarea name="boardComment" rows="20" cols="55" oninput="maxsLength(this,comments)"></textarea>
+							</td>
 						</tr>
 						<tr id="addPoint"></tr>
 						<!--  -->
 						<tr>
-							<td align="center">Writer</td>
-							<td></td>
+							<td align="center">
+								Writer
+							</td>
+							<td>
+								${loginUser.userName}
+							</td>
 						</tr>
 					</table>
 				</td>
 			</tr>
 			<tr>
-				<td align="right"><a href="/board/boardList.do">List</a></td>
+				<td align="right">
+					<a href="/board/boardList.do">
+						List
+					</a>
+				</td>
 			</tr>
 		</table>
 	</form>

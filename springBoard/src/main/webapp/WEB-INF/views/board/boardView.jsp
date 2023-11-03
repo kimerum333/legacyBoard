@@ -9,6 +9,10 @@
 	</head>
 	
 <script type="text/javascript">
+
+
+
+
 	 $j(document).ready(function(){
 		 editCancelBtn();
 	 })
@@ -86,8 +90,18 @@
 			    {
 			    	alert("실패");
 			    }
-			});	
+			});
 			
+		}
+		const titles = { "max": 16, "name": "제목" };
+		const comments = { "max": 300, "name": "게시글 내용" };
+
+		function maxsLength(input,obj){
+			if(input.value.length>obj.max){
+				alert(obj.name+'은 최대 '+obj.max+'자 까지만 입력할 수 있습니다.');
+				input.value=input.value.substring(0,obj.max);
+				input.focus();
+			}
 		}
 </script>
 	<body>
@@ -109,7 +123,7 @@
 								${board.boardTitle}
 							</td>
 							<td width="400" class="editor">
-								<input name="boardTitle" type="text" value="${board.boardTitle}">
+								<input name="boardTitle" type="text" value="${board.boardTitle}" oninput="maxsLength(this,titles)" >
 							</td>
 						</tr>
 						<tr>
@@ -120,18 +134,22 @@
 								${board.boardComment}
 							</td>
 							<td class="editor">
-								<textarea name="boardComment"  rows="20" cols="55">${board.boardComment}</textarea>
+								<textarea name="boardComment"  rows="20" cols="55" oninput="maxsLength(this,comments)" >${board.boardComment}</textarea>
 							</td>
 						</tr>
 						<tr>
 							<td align="center">
 								Writer
 							</td>
+							<td align="left">
+								${board.creatorName}
+							</td>
 						</tr>
 					</table>
 				</td>
 			</tr>
 			<tr>
+			<c:if test="${loginUser.userId eq board.creator}">
 				<td align="right" class="viewer">
 					<a href="#" onclick="editBtn()">Edit</a>
 				</td>
@@ -141,6 +159,8 @@
 				<td align="right">
 					<a href="#" onclick="deleteBtn()">Delete</a>
 				</td>
+			</c:if>
+				
 				<td align="right">
 					<a href="/board/boardList.do">List</a>
 				</td>

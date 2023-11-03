@@ -8,6 +8,7 @@
     	<result property="boardTitle" 	column="BOARD_TITLE"/>
     	<result property="boardComment" column="BOARD_COMMENT"/>
     	<result property="boardTypeKr" 	column="BOARD_TYPE_KR"/>
+    	<result property="creatorName"  column="CREATOR_NAME"/>
     </resultMap>
     <resultMap type="com.spring.board.vo.CodeVo" id="codeVo">
     	<result property="codeType" 	column="CODE_TYPE"/>
@@ -17,12 +18,14 @@
     
     <select id="boardList" parameterType="com.spring.board.vo.PageVo" resultMap="boardVo">
         SELECT
-          BOARD_TYPE	 
-		  ,BOARD_NUM
-		  ,BOARD_TITLE
-		  ,BOARD_COMMENT
-		  ,TOTAL_CNT
+          B.BOARD_TYPE	 
+		  ,B.BOARD_NUM
+		  ,B.BOARD_TITLE
+		  ,B.BOARD_COMMENT
+		  ,B.CREATOR
+		  ,B.TOTAL_CNT
 		  ,C.CODE_NAME AS BOARD_TYPE_KR
+		  ,D.USER_NAME AS CREATOR_NAME
 		FROM 
 		(
 		  SELECT
@@ -30,6 +33,7 @@
 				,BOARD_NUM
 				,BOARD_TITLE
 				,BOARD_COMMENT
+				,CREATOR
 		      	,ROW_NUMBER() OVER(ORDER BY BOARD_NUM DESC) AS NUMROW
 		      	,COUNT(*) OVER() AS TOTAL_CNT
 			FROM
@@ -43,6 +47,8 @@
 		) B
 		LEFT JOIN COM_CODE C
 			ON B.BOARD_TYPE = C.CODE_ID
+		LEFT JOIN USER_INFO D
+			ON B.CREATOR = D.USER_ID
 		WHERE NUMROW BETWEEN (#{pageNo}-1)*10 + 1 AND (#{pageNo})*10
     </select>
     
@@ -56,20 +62,23 @@
 				<foreach collection='searchConditions' index='index' item='condition' open='(' close=')' separator=','>
 					#{condition}
 				</foreach>
-			</if>
-					
+			</if>			
     </select>
     	
     <select id="boardView" parameterType="com.spring.board.vo.BoardVo" resultMap="boardVo">
     	SELECT
-        	BOARD_TYPE
-			,BOARD_NUM
-			,BOARD_TITLE
-			,BOARD_COMMENT
+        	B.BOARD_TYPE
+			,B.BOARD_NUM
+			,B.BOARD_TITLE
+			,B.BOARD_COMMENT
+			,B.CREATOR
+			,U.USER_NAME AS CREATOR_NAME
 		FROM
-			BOARD
-    	WHERE 	BOARD_TYPE = #{boardType}
-    	AND 	BOARD_NUM  = #{boardNum}
+			BOARD B
+			LEFT JOIN USER_INFO U
+				ON B.CREATOR = U.USER_ID
+    	WHERE 	B.BOARD_TYPE = #{boardType}
+    	AND 	B.BOARD_NUM  = #{boardNum}
     </select>	
     
     <select id="boardInsert" parameterType="com.spring.board.vo.BoardVo">
@@ -92,7 +101,7 @@
 	    WHERE BOARD_TYPE = #{boardType}), 1)
         ,#{boardTitle}
         ,#{boardComment}
-        ,'SYSTEM'
+        ,NVL(#{creator},'SYSTEM')
         ,TO_CHAR(SYSDATE)
         ,'SYSTEM'
         ,TO_CHAR(SYSDATE)

@@ -69,6 +69,8 @@ public class BoardDaoImpl implements BoardDao{
 		return sqlSession.selectList("board.selectCode",codeType);
 	}
 	
+
+	
 	
 	
 }

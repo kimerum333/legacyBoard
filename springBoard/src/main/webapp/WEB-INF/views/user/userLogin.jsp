@@ -9,7 +9,29 @@
 </head>
 <script type="text/javascript">
 
+//엔터 입력시 ID중복검사. 검사 통과상태일시 제출
+window.addEventListener("keydown", (e) => {
+    if (e.key === 'Enter') {
+        	submit();
+    }
+});
+
 function submit(){
+	
+	let elem = document.getElementById('userId');
+	if(!elem.value){
+		elem.focus();
+		alert('아이디를 입력해주세요.');
+		return;
+	}
+	
+	let elem2 = document.getElementById('userPw');
+	if(!elem2.value){
+		elem2.focus();
+		alert('비밀먼호를 입력해주세요.');
+		return;
+	}
+	
 	
 	let form = $j('.userLogin :input');
 	let param = form.serialize();
@@ -22,8 +44,10 @@ function submit(){
 		success : function(data, textStatus, jqXHR) {
 			if(data.success=='wrongId'){
 				alert('존재하지 않는 아이디입니다.');
+				document.getElementById('userId').focus();
 			}else if(data.success=='wrongPw'){
 				alert('비밀번호가 잘못되었습니다.');
+				document.getElementById('userPw').focus();
 			}else if(data.success=='loged in'){
 				alert('로그인 성공');
 				location.href = "/board/boardList.do?pageNo=0";
@@ -46,13 +70,13 @@ function submit(){
 				<tr>
 					<td width="120" align="center">id</td>
 					<td width="300"> 
-           				<input id="userId" name="userId" type="text" size="25"> 
+           				<input id="userId" name="userId" type="text" size="25" autofocus> 
        				</td>
 				</tr>
 				<tr>
 					<td width="120" align="center">pw</td>
 					<td width="300">
-						<input id="userPw" name="userPw" type="text" size="25">
+						<input id="userPw" name="userPw" type="password" size="25">
 					</td>
 				</tr>
 			</table>

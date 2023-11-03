@@ -31,8 +31,9 @@ import com.spring.user.vo.UserVo;
 public class UserController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-	@Autowired
+
 	private UserService userService;
+	
 	@Autowired
 	private BoardService boardService;
 	
@@ -40,7 +41,7 @@ public class UserController {
 	}
 
 
-	
+	@Autowired
 	public UserController(UserService userService){
 		this.userService = userService;
 	}
@@ -83,7 +84,7 @@ public class UserController {
 		Integer ok = userService.duplicateCheckUser(userId);
 		logger.info("ID 중복확인결과"+ok);
 
-		result.put("success", (ok == 0)?"Y":"N"); // success라는 제목으로 String된 JSON을 넣는다.
+		result.put("success", (ok == 0)?"Y":"N"); 
 		if(ok==0) {
 			result.put("userId", userId);
 		}
