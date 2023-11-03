@@ -18,7 +18,7 @@ $j(document).ready(function() {
 		$j.ajax({
 			url : "/mbti/writeAction.do",
 			dataType : "json",
-			type : "POST",
+			type : "POST", 
 			data : param,
 			success : function(data, textStatus, jqXHR) {
 				alert("mbti 등록완료");
